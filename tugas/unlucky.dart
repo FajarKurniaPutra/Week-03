@@ -3,21 +3,41 @@ import 'dart:io';
 import 'dart:math';
 
 void main() {
-//variabel random untuk memakai generator angka random
+  // Variabel random untuk generator angka
   var random = Random();
-  //variabel sial untuk menampung angka random
-  int sial = random.nextInt(10) + 1; 
+  // Variabel untuk menampung jumlah pemain
+  int? jumlahPemain;
 
-//Tampilkan teks pada terminal
-  print('=== Unlucky Roulette ===');
-  stdout.write('Pilih angka aman (1-10): ');
-  //variabel tebakan untuk menampung angka yang diinput
-  int tebakan = int.parse(stdin.readLineSync()!);
+  print('=== Unlucky Roulette: Multiplayer Edition ===');
 
-//Kondisi untuk mengecek tebakan
-  if (tebakan == sial) {
-    print('BOOM! Kamu terkena kutukan di angka $sial!');
-  } else {
-    print('HORE! Kamu beruntung. Kutukan ada di angka $sial.');
+  // Perulangan untuk memvalidasi jumlah pemain (1-4)
+  do {
+    stdout.write('Masukkan jumlah pemain (1-4): ');
+    // Membaca input dan mengubah ke integer
+    jumlahPemain = int.tryParse(stdin.readLineSync() ?? '');
+
+    // Cek jika input kosong atau di luar jangkauan 1-4
+    if (jumlahPemain == null || jumlahPemain < 1 || jumlahPemain > 4) {
+      print('Error: Pemain minimal 1 dan maksimal 4 orang!');
+    }
+  } while (jumlahPemain == null || jumlahPemain < 1 || jumlahPemain > 4);
+
+  // Variabel sial untuk menampung angka random 1-10
+  int sial = random.nextInt(10) + 1;
+
+  // Perulangan untuk menjalankan giliran setiap pemain
+  for (int i = 1; i <= jumlahPemain; i++) {
+    print('\n--- Giliran Pemain $i ---');
+    stdout.write('Pilih angka aman (1-10): ');
+    // Variabel tebakan untuk menampung input pemain
+    int tebakan = int.parse(stdin.readLineSync()!);
+
+    // Kondisi mengecek apakah pemain terkena angka sial
+    if (tebakan == sial) {
+      print('Kamu terkena kutukan di angka $sial!');
+      break; // Permainan berhenti jika ada yang kena
+    } else {
+      print('Pemain $i aman. Kutukan bukan di angka $tebakan.');
+    }
   }
 }
