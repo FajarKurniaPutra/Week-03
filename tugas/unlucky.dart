@@ -24,13 +24,27 @@ void main() {
 
   // Variabel sial untuk menampung angka random 1-10
   int sial = random.nextInt(10) + 1;
+  // List untuk menampung angka yang sudah dipilih
+  List<int> tebakanTerpakai = []; 
 
   // Perulangan untuk menjalankan giliran setiap pemain
   for (int i = 1; i <= jumlahPemain; i++) {
-    print('\n--- Giliran Pemain $i ---');
-    stdout.write('Pilih angka aman (1-10): ');
-    // Variabel tebakan untuk menampung input pemain
-    int tebakan = int.parse(stdin.readLineSync()!);
+    int? tebakan;
+    while (true) {
+      print('\n--- Giliran Pemain $i ---');
+      stdout.write('Pilih angka aman (1-10): ');
+      tebakan = int.tryParse(stdin.readLineSync() ?? '');
+
+      if (tebakan == null || tebakan < 1 || tebakan > 10) {
+        print('Masukkan angka 1-10!');
+      } else if (tebakanTerpakai.contains(tebakan)) {
+        print('Angka $tebakan sudah diambil player lain! Pilih angka lain.');
+      } else {
+        // Simpan angka agar tidak bisa dipakai lagi
+        tebakanTerpakai.add(tebakan); 
+        break;
+      }
+    }
 
     // Kondisi mengecek apakah pemain terkena angka sial
     if (tebakan == sial) {
